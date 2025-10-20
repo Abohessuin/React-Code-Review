@@ -1235,58 +1235,5 @@ Create `.vscode/settings.json`:
 }
 ```
 
----
-
-## 📚 **Additional Resources**
-
-### **Official Documentation:**
-- [React Official Docs](https://react.dev/) - Modern React documentation
-- [React Hooks Reference](https://react.dev/reference/react) - Complete hooks API
-- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/) - TypeScript patterns
-
-### **Style Guides:**
-- [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react) - Industry standard
-- [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html) - Google's conventions
-
-### **Performance:**
-- [React Performance Optimization](https://react.dev/learn/render-and-commit) - Official guide
-- [Web Vitals](https://web.dev/vitals/) - Core web vitals
-
-### **Accessibility:**
-- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Accessibility standards
-- [React Accessibility](https://react.dev/learn/accessibility) - Official accessibility guide
-- [axe DevTools](https://www.deque.com/axe/devtools/) - Browser extension for a11y testing
-
-### **Material-UI Specific:**
-- [Material-UI Documentation](https://mui.com/material-ui/) - Component library
-- [MUI System](https://mui.com/system/getting-started/) - Styling utilities
-- [MUI Best Practices](https://mui.com/material-ui/guides/minimizing-bundle-size/) - Optimization guide
-
-### **Testing:**
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) - Testing utilities
-- [Jest Documentation](https://jestjs.io/docs/getting-started) - Test framework
-
----
-
-## 🤝 **Contributing to These Guidelines**
-
-These guidelines are a living document. If you have suggestions for improvements:
-
-1. Discuss with the team during code reviews
-2. Create a pull request with proposed changes
-3. Update the version number and "Last Updated" date
-4. Ensure team consensus before merging
-
----
-
-## 📝 **Version History**
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | October 2025 | Initial release |
-
----
-
----
 
 **Remember:** These guidelines exist to make our codebase more maintainable, not to slow you down. When in doubt, prioritize the **Mandatory** rules and use common sense for the rest. Happy coding! 🚀
