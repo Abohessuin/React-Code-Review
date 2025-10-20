@@ -14,7 +14,7 @@
 2. [Nice to Have Best Practices](#-nice-to-have-recommended-best-practices)
 3. [Quick Checklist](#-quick-checklist)
 4. [Tools to Enforce Rules](#-tools-to-enforce-rules)
-5. [Additional Resources](#-additional-resources)
+
 
 ---
 
