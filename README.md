@@ -12,8 +12,9 @@
 
 1. [Mandatory Rules](#-mandatory-rules-must-follow)
 2. [Nice to Have Best Practices](#-nice-to-have-recommended-best-practices)
-3. [Quick Checklist](#-quick-checklist)
-4. [Tools to Enforce Rules](#-tools-to-enforce-rules)
+3. [React Design Patterns for Scalable Architecture](#-react-design-patterns-for-scalable-architecture)  
+4. [Quick Checklist](#-quick-checklist)
+5. [Tools to Enforce Rules](#-tools-to-enforce-rules)
 
 
 ---
@@ -1105,6 +1106,266 @@ const UserTable = () => {
 
 ---
 
+---
+
+## 🧱 **React Design Patterns for Scalable Architecture**
+
+> These patterns help structure your React code so it remains modular, testable, and easy to extend.  
+> They’re not “rules”, but **guidelines** for consistency, scalability, and clarity.
+
+---
+
+### **1. Container & Presentation Pattern (Separation of Concerns)**
+
+> Split “logic” from “UI”. Containers handle data and state; Presentational components handle rendering.
+
+```jsx
+// ✅ Example
+
+// UserListContainer.jsx
+import { useSelector } from 'react-redux';
+import UserList from './UserList';
+
+const UserListContainer = () => {
+  const users = useSelector(state => state.users);
+  const isLoading = useSelector(state => state.ui.isLoading);
+
+  return <UserList users={users} isLoading={isLoading} />;
+};
+
+// UserList.jsx
+const UserList = ({ users, isLoading }) => {
+  if (isLoading) return <Spinner />;
+  if (!users?.length) return <EmptyState />;
+
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+};
+```
+
+**Why:**
+- Easier testing (logic isolated from UI)  
+- UI components reusable in other contexts  
+- Improves maintainability and readability  
+
+---
+
+### **2. Compound Component Pattern**
+
+> Allow a group of components to share implicit state without prop-drilling.
+
+```jsx
+const Accordion = ({ children }) => {
+  const [openIndex, setOpenIndex] = useState(null);
+  return (
+    <AccordionContext.Provider value={{ openIndex, setOpenIndex }}>
+      {children}
+    </AccordionContext.Provider>
+  );
+};
+
+const AccordionItem = ({ index, children }) => {
+  const { openIndex, setOpenIndex } = useContext(AccordionContext);
+  const isOpen = index === openIndex;
+
+  return (
+    <div>
+      <button onClick={() => setOpenIndex(isOpen ? null : index)}>Toggle</button>
+      {isOpen && <div>{children}</div>}
+    </div>
+  );
+};
+```
+
+**Why:**
+- Enables flexible, declarative APIs  
+- Maintains internal state without extra props  
+- Great for Tabs, Accordions, Dropdowns, Modals  
+
+---
+
+### **3. Custom Hook Pattern**
+
+> Encapsulate reusable logic (data fetching, state, side effects).
+
+```jsx
+const useFetchUsers = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(setUsers)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { users, loading };
+};
+```
+
+**Why:**
+- Reusable and testable logic  
+- Keeps components clean  
+- Avoids duplication  
+
+---
+
+### **4. Render Props Pattern**
+
+> Share logic via a function-as-children pattern.
+
+```jsx
+const DataFetcher = ({ url, children }) => {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetch(url).then(res => res.json()).then(setData);
+  }, [url]);
+  return children(data);
+};
+```
+
+**Why:**
+- Decouples logic and UI  
+- Enables flexible composition  
+
+---
+
+### **5. Higher-Order Component (HOC) Pattern**
+
+> Function that takes a component and returns an enhanced one.
+
+```jsx
+const withLoading = Component => ({ isLoading, ...props }) =>
+  isLoading ? <Spinner /> : <Component {...props} />;
+```
+
+**Why:**
+- Reuse logic like authentication, permissions, loading states  
+- Keep base components pure  
+
+---
+
+### **6. Provider Pattern**
+
+> Share global state or config with context providers.
+
+```jsx
+const ThemeContext = createContext();
+
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('light');
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+const useTheme = () => useContext(ThemeContext);
+```
+
+**Why:**
+- Avoid prop drilling  
+- Centralize global data (auth, theme, config)  
+
+---
+
+### **7. Controlled vs. Uncontrolled Components**
+
+> Prefer controlled inputs for predictability.
+
+```jsx
+<input value={email} onChange={e => setEmail(e.target.value)} />
+```
+
+**Why:**  
+- Predictable state  
+- Easier validation and reset logic  
+
+---
+
+### **8. State Reducer Pattern**
+
+> Use `useReducer` for complex, multi-action state.
+
+```jsx
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case 'UPDATE_FIELD':
+      return { ...state, [action.field]: action.value };
+    case 'RESET':
+      return initialState;
+    default:
+      return state;
+  }
+};
+```
+
+**Why:**
+- Predictable updates  
+- Scales better than multiple `useState`s  
+
+---
+
+### **9. Controlled Composition Pattern**
+
+> Let parent control component behavior using props instead of internal state.
+
+```jsx
+const Modal = ({ open, onClose, children }) =>
+  open ? (
+    <div className="overlay">
+      <div className="modal">
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  ) : null;
+```
+
+**Why:**
+- Parent maintains control  
+- Easier integration with global state or routing  
+
+---
+
+### **10. Directory Pattern / File Organization**
+
+> Organize code **by feature**, not file type.
+
+```bash
+src/
+ ├─ features/
+ │   ├─ users/
+ │   │   ├─ components/
+ │   │   │   ├─ UserList.jsx
+ │   │   │   ├─ UserCard.jsx
+ │   │   ├─ hooks/
+ │   │   │   ├─ useFetchUsers.js
+ │   │   ├─ redux/
+ │   │   │   ├─ userSlice.js
+ │   │   ├─ constants.js
+ │   │   ├─ index.js
+ ├─ shared/
+ │   ├─ components/
+ │   ├─ hooks/
+ │   ├─ utils/
+```
+
+**Why:**
+- All feature logic is co-located  
+- Scales well for large teams and repos  
+
+---
+---
+
+---
 ## 📋 **Quick Checklist**
 
 Before submitting code for review, verify:
@@ -1136,6 +1397,13 @@ Before submitting code for review, verify:
 - [ ] ✨ Consistent styling approach
 - [ ] ✨ No unnecessary inline functions
 - [ ] ✨ Descriptive variable names
+- [ ] Containers handle logic; presentation handles UI  
+- [ ] Shared logic extracted into custom hooks  
+- [ ] Complex reusable UI uses compound components  
+- [ ] No prop drilling (use context providers)  
+- [ ] Reducers used for complex local state  
+- [ ] Components are composable and controlled  
+- [ ] Folder structure organized by feature  
 
 ---
 
