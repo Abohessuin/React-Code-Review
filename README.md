@@ -1106,8 +1106,6 @@ const UserTable = () => {
 
 ---
 
----
-
 ## 🧱 **React Design Patterns for Scalable Architecture**
 
 > These patterns help structure your React code so it remains modular, testable, and easy to extend.  
