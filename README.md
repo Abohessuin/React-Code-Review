@@ -621,8 +621,6 @@ UserProfile.defaultProps = {
 export default UserProfile;
 ```
 
----
-
 ### **2. Extract Complex Logic**
 
 #### **2.1 Custom Hooks for Reusable Logic**
@@ -1361,9 +1359,7 @@ src/
 - Scales well for large teams and repos  
 
 ---
----
 
----
 ## 📋 **Quick Checklist**
 
 Before submitting code for review, verify:
